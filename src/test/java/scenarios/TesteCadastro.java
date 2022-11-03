@@ -13,6 +13,7 @@ public class TesteCadastro {
     String CONFIRMASENHA = "//body/div[@id='__next']//form[1]/div[5]//input[1]";
     String CRIARSALDO = "//label[@id='toggleAddBalance']";
     String BOTAOCADASTRAR = "//button[contains(text(),'Cadastrar')]";
+    String BOTAOFECHARCADASTROSUCESSO = "//a[@id='btnCloseModal']";
 
     public TesteCadastro(WebDriver driverParametro){
         this.driver = driverParametro;
@@ -30,12 +31,12 @@ public class TesteCadastro {
         driver.findElement(By.xpath(NOME)).sendKeys("Emerson");
     }
 
-    public void preencherSenha(){
-        driver.findElement(By.xpath(SENHA)).sendKeys("123456");
+    public void preencherSenha(String senha){
+        driver.findElement(By.xpath(SENHA)).sendKeys(senha);
     }
 
-    public void preencherConfirmacaoSenha(){
-        driver.findElement(By.xpath(CONFIRMASENHA)).sendKeys("123456");
+    public void preencherConfirmacaoSenha(String senha){
+        driver.findElement(By.xpath(CONFIRMASENHA)).sendKeys(senha);
     }
 
     public void selecionaSaldo(){
@@ -44,5 +45,9 @@ public class TesteCadastro {
 
     public void clicaBotaoCadastrar(){
         driver.findElement(By.xpath(BOTAOCADASTRAR)).click();
+    }
+
+    public void clicaBotaoFecharContaCriada(){
+        driver.findElement(By.xpath(BOTAOFECHARCADASTROSUCESSO)).click();
     }
 }
