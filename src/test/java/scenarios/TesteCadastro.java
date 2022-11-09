@@ -23,12 +23,12 @@ public class TesteCadastro {
         driver.findElement(By.xpath(BOTAOREGISTRAR)).click();
     }
 
-    public void preencherEmail(){
-        driver.findElement(By.xpath(EMAIL)).sendKeys("teste@teste.com");
+    public void preencherEmail(String email){
+        driver.findElement(By.xpath(EMAIL)).sendKeys(email);
     }
 
-    public void preencherNome(){
-        driver.findElement(By.xpath(NOME)).sendKeys("Emerson");
+    public void preencherNome(String nome){
+        driver.findElement(By.xpath(NOME)).sendKeys(nome);
     }
 
     public void preencherSenha(String senha){

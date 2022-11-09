@@ -1,6 +1,7 @@
 package pages;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -17,6 +18,9 @@ public class CadastroPage {
     TesteCadastro testeCadastro;
 
     String SENHACORRETA = "123456";
+    String EMAIL = "teste@teste.com";
+    String NOME = "Emerson";
+    String CAMPOSOBRIGATORIOS = "É campo obrigatório";
 
     @Before
     public void setupBrowser(){
@@ -31,26 +35,36 @@ public class CadastroPage {
     @Test
     public void testeCadastroComSucesso(){
         testeCadastro.clicarBotaoRegistrar();
-        testeCadastro.preencherEmail();
-        testeCadastro.preencherNome();
+        testeCadastro.preencherEmail(EMAIL);
+        testeCadastro.preencherNome(NOME);
         testeCadastro.preencherSenha(SENHACORRETA);
         testeCadastro.preencherConfirmacaoSenha(SENHACORRETA);
         testeCadastro.selecionaSaldo();
         testeCadastro.clicaBotaoCadastrar();
-        //Criar assert para validar o cadastro, inspecionem o texto que da na mensagem - Utilizar exemplos da LoginPage
+        validarMensagem("foi criada com sucesso");
         testeCadastro.clicaBotaoFecharContaCriada();
     }
 
     @Test
     public void testeExcecaoSemEmailCampoObrigatorio(){
         testeCadastro.clicarBotaoRegistrar();
-        testeCadastro.preencherNome();
+        testeCadastro.preencherNome(NOME);
         testeCadastro.preencherSenha(SENHACORRETA);
         testeCadastro.preencherConfirmacaoSenha(SENHACORRETA);
         testeCadastro.selecionaSaldo();
         testeCadastro.clicaBotaoCadastrar();
-        testeCadastro.clicaBotaoFecharContaCriada();
-        //Criar assert para buscar a mensagem de campo obrigatorio nao preenchido - Utilizar exemplos da LoginPage
+        validarMensagem(CAMPOSOBRIGATORIOS);
+    }
+
+    @Test
+    public void testeCamposVazios(){
+        testeCadastro.clicarBotaoRegistrar();
+        testeCadastro.clicaBotaoCadastrar();
+        validarMensagem(CAMPOSOBRIGATORIOS);
+    }
+
+    public void validarMensagem(String msgExibida){
+        Assert.assertTrue(driver.getPageSource().contains(msgExibida));
     }
 
     @After

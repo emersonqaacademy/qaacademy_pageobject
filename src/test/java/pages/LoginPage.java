@@ -21,11 +21,15 @@ public class LoginPage {
     WebDriver driver;
     TesteLogin testeLogin;
     TesteCadastro testeCadastro;
+    String MSGUSUARIOSENHAINVALIDA = "Usuário ou senha inválido.\nTente novamente ou verifique suas informações!";
+    String EMAIL = "teste@teste.com";
+    String NOME = "Emerson";
 
     @Before
     public void setupBrowser(){
         options = new ChromeOptions();
         options.addArguments("--window-size=1810,1000");
+        options.addArguments("--headless");
         driver = new ChromeDriver(options);
         testeCadastro = new TesteCadastro(driver);
         testeLogin = new TesteLogin(driver);
@@ -36,9 +40,10 @@ public class LoginPage {
     }
 
     @Test
-    public void loginComSucesso(){
-        testeLogin.preencheLoginEmail();
+    public void loginComSucesso() throws InterruptedException {
+        testeLogin.preencheLoginEmail(EMAIL);
         testeLogin.preencheSenha("123456");
+        Thread.sleep(2000);
         testeLogin.clicarBotaoAcessar();
         String msgBemVindoBugBank = driver.findElement(By.xpath("//p[contains(text(),'bem vindo ao BugBank :)')]")).getText();
         validarMensagem(msgBemVindoBugBank);//Exemplo de validacao de msg apos LOGIN
@@ -48,17 +53,24 @@ public class LoginPage {
 
     @Test
     public void loginComExcecaoSenha(){
-        testeLogin.preencheLoginEmail();
+        testeLogin.preencheLoginEmail(EMAIL);
         testeLogin.preencheSenha(senhaIncorreta);
         testeLogin.clicarBotaoAcessar();
-        String textoEsperado = "Usuário ou senha inválido.\nTente novamente ou verifique suas informações!";
-        Assert.assertTrue(driver.getPageSource().contains(textoEsperado)); //Exemplo de assert.
+        validarMensagem(MSGUSUARIOSENHAINVALIDA); //Exemplo de assert.
+    }
+
+    @Test
+    public void validaBotaoRequisitos(){
+        testeLogin.clicarBotaoRequisitos();
+        String msgRequirements = driver.findElement(By.xpath("//p[contains(text(),'Gostou do projeto e quer contribuir?')]")).getText();
+        validarMensagem(msgRequirements);
+        validarUrl("/requirements");//Exemplo validacao de pagina apos LOGIN (url)
     }
 
     public void cadastrarUsuario(){
         testeCadastro.clicarBotaoRegistrar();
-        testeCadastro.preencherEmail();
-        testeCadastro.preencherNome();
+        testeCadastro.preencherEmail(EMAIL);
+        testeCadastro.preencherNome(NOME);
         testeCadastro.preencherSenha(senhaCorreta);
         testeCadastro.preencherConfirmacaoSenha(senhaCorreta);
         testeCadastro.selecionaSaldo();
